@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Recipe App</title>
+</head>
+<body>
+<h1>Recipe App</h1>
+
+<button onclick="loadAllRecipes()">Load All Recipes</button>
+<ul id="allRecipes"></ul>
+
+<h2>Search Recipes by Ingredients</h2>
+<form onsubmit="searchRecipes(event)">
+    <input id="ingredients" type="text" placeholder="Comma separated ingredients" required />
+    <button type="submit">Search</button>
+</form>
+
+<ul id="searchResults"></ul>
+
+<script>
+    function loadAllRecipes() {
+      fetch('/recipes')
+        .then(res => res.json())
+        .then(data => {
+          const ul = document.getElementById('allRecipes');
+          ul.innerHTML = '';
+          data.forEach(r => {
+            const li = document.createElement('li');
+            li.textContent = `${r.name} - Ingredients: ${r.ingredients.join(', ')}`;
+            ul.appendChild(li);
+          });
+        });
+    }
+
+    function searchRecipes(event) {
+      event.preventDefault();
+      const input = document.getElementById('ingredients').value.trim();
+      if (!input) return alert('Please enter ingredients');
+
+      const ingredients = input.split(',')
+        .map(i => i.trim())
+        .filter(i => i);
+
+      fetch('/recipes/search', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ingredients})
+      })
+      .then(res => res.json())
+      .then(data => {
+        const ul = document.getElementById('searchResults');
+        ul.innerHTML = '';
+        if (Array.isArray(data) && data.length) {
+          data.forEach(r => {
+            const li = document.createElement('li');
+            li.textContent = `${r.name} - Ingredients: ${r.ingredients.join(', ')}`;
+            ul.appendChild(li);
+          });
+        } else {
+          ul.textContent = 'No recipes found.';
+        }
+      })
+      .catch(() => alert('Error searching recipes'));
+    }
+</script>
+</body>
+</html>

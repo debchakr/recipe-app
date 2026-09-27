@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Tomato Pasta",
+    "ingredients": ["tomato", "pasta", "olive oil", "salt"]
+  },
+  {
+    "id": 2,
+    "name": "Chicken Salad",
+    "ingredients": ["chicken", "lettuce", "olive oil", "salt", "pepper"]
+  },
+  {
+    "id": 3,
+    "name": "Pancakes",
+    "ingredients": ["flour", "milk", "egg", "salt", "sugar"]
+  }
+]
